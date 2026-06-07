@@ -20,11 +20,6 @@ public class RecordController {
         this.recordService = recordService;
     }
 
-    @GetMapping
-    public List<Records> getRecords() {
-        return recordService.getRecords();
-    }
-
     @GetMapping("/categories")
     public List<Categories> getCategories() {
         return recordService.getCategories();

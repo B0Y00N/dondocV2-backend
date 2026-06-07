@@ -97,12 +97,12 @@ public class RecordService {
         List<RecordItemResponse> records = recordRepository.findByUserMonth(userId, yearMonth, type);
 
         long totalIncome = records.stream()
-                .filter(r -> r.getType().equals("INCOME"))
+                .filter(r -> r.getType().equalsIgnoreCase("INCOME"))
                 .mapToLong(RecordItemResponse::getAmount)
                 .sum();
 
         long totalExpense = records.stream()
-                .filter(r -> r.getType().equals("EXPENSE"))
+                .filter(r -> r.getType().equalsIgnoreCase("EXPENSE"))
                 .mapToLong(RecordItemResponse::getAmount)
                 .sum();
 

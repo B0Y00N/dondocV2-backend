@@ -52,7 +52,7 @@ public class RecordRepository {
 
             return jdbcTemplate.query(sql, (rs, rowNum) -> new RecordItemResponse(
                     rs.getLong("id"),
-                    rs.getString("category_type"),
+                    rs.getString("category_type").toUpperCase(),
                     rs.getString("record_date"),
                     new CategoryInfo(rs.getLong("category_id"),
                             rs.getString("category_name")),
@@ -63,7 +63,7 @@ public class RecordRepository {
         }
         return jdbcTemplate.query(sql, (rs, rowNum) -> new RecordItemResponse(
                 rs.getLong("id"),
-                rs.getString("category_type"),
+                rs.getString("category_type").toUpperCase(),
                 rs.getString("record_date"),
                 new CategoryInfo(rs.getLong("category_id"), rs.getString("category_name")),
                 rs.getLong("amount"),
