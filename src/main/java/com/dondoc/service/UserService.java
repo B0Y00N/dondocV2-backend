@@ -2,6 +2,7 @@ package com.dondoc.service;
 
 import com.dondoc.dto.*;
 import com.dondoc.entity.User;
+import com.dondoc.repository.RecordRepository;
 import com.dondoc.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RecordRepository recordRepository;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, RecordRepository recordRepository){
         this.userRepository = userRepository;
+        this.recordRepository = recordRepository;
     }
 
     public List<Users> getUsers(){
@@ -99,6 +102,29 @@ public class UserService {
         );
 
         return new ApiResponse<>(true, data, "프로필 설정이 완료되었습니다.");
+
+    }
+
+    //  1. repository에서 records 가져오기
+    //  2. stream으로 수입/지출 합계 계산
+    //  3. summary + records 합쳐서 응답 반환
+    public ApiResponse<RecordMonthlyResponse> getMonthlyRecords(Long userId, String yearMonth, String type) {
+        List<RecordItemResponse> records = recordRepository.findByUserMonth(userId, yearMonth, type);
+
+        long totalIncome = records.stream()
+                .filter(r -> r.getType().equals("INCOME"))
+                .mapToLong(RecordItemResponse::getAmount)
+                .sum();
+
+        long totalExpense = records.stream()
+                .filter(r -> r.getType().equals("EXPENSE"))
+                .mapToLong(RecordItemResponse::getAmount)
+                .sum();
+
+        RecordSummary summary = new RecordSummary(totalIncome, totalExpense, totalIncome - totalExpense);
+        RecordMonthlyResponse data = new RecordMonthlyResponse(summary, records);
+
+        return new ApiResponse<>(true, data, "거래 내역 조회 성공");
 
     }
 
