@@ -1,6 +1,9 @@
 package com.dondoc.controller;
 
+import com.dondoc.dto.auth.LoginRequest;
+import com.dondoc.dto.auth.LoginResponse;
 import com.dondoc.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +20,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(){
-        return ResponseEntity.ok(Map.of());
+    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+        LoginResponse response = authService.loginUser(request);
+        if(response == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                "success", false,
+                "message", "아이디 또는 비밀번호가 일치하지 않습니다.",
+                "data", new Object()
+        ));
+        else return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "로그인 성공",
+                "data", response
+        ));
     }
 
     @PostMapping("/signup")
