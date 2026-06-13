@@ -5,6 +5,7 @@ import com.dondoc.dto.FarmMembers;
 import com.dondoc.dto.FarmMembers.FarmJoinResponse;
 import com.dondoc.dto.Farms;
 import com.dondoc.service.FarmService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,12 +40,10 @@ public class FarmController {
     public ResponseEntity<ApiResponse<FarmJoinResponse>> addFarmMember(
             @RequestHeader("userId") long userId,
             @PathVariable long farmId) {
-        try {
-            FarmJoinResponse data = farmService.addFarmMember(userId, farmId);
-            String message = "농장 가입 성공";
-            return ResponseEntity.ok(ApiResponse.ok(data, message));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(ApiResponse.fail("농장 가입 실패"));
-        }
+        FarmJoinResponse data = farmService.addFarmMember(userId, farmId);
+        String message = "농장 가입 성공";
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.ok(data, message));
     }
 }

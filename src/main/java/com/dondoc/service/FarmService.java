@@ -5,9 +5,11 @@ import com.dondoc.dto.FarmMembers.FarmJoinResponse;
 import com.dondoc.dto.Farms;
 import com.dondoc.entity.Farm;
 import com.dondoc.entity.FarmMember;
+import com.dondoc.exception.ApiException;
 import com.dondoc.repository.FarmMemberRepository;
 import com.dondoc.repository.FarmRepository;
 import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +55,12 @@ public class FarmService {
     }
 
     public FarmJoinResponse addFarmMember(long userId, long farmId){
+        farmRepository.findById(farmId)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "존재하지 않는 농장입니다."));
+
+        farmMemberRepository.findByUserIdAndFarmId(userId, farmId)
+                .ifPresent(m -> new ApiException(HttpStatus.CONFLICT, "이미 가입한 농장입니다."));
+
         FarmMember farmMember = new FarmMember(
                 null, userId, farmId, LocalDateTime.now()
         );
