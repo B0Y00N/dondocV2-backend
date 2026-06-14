@@ -26,13 +26,15 @@ public class FarmRepository {
         ));
     }
 
-    public Optional<Farm> findById(long farmId) {
+    public Optional<Farm> findById(Long id) {
         String sql = "SELECT * FROM farms WHERE id = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Farm(
+        List<Farm> farms = jdbcTemplate.query(sql, (rs, rowNum) -> new Farm(
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getObject("created_at", LocalDateTime.class)
-        ), farmId).stream().findFirst();
+        ), id);
+
+        return farms.stream().findFirst();
     }
 
     public void save(Farm farm) {

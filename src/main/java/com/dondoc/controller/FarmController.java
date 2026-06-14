@@ -21,9 +21,14 @@ public class FarmController {
         this.farmService = farmService;
     }
 
-    @GetMapping
-    public List<Farms> getFarms() {
-        return farmService.getFarms();
+//    @GetMapping
+//    public List<Farms> getFarms() {
+//        return farmService.getFarms();
+//    }
+
+    @GetMapping("")
+    public ApiResponse<List<Farms.FarmGetResponse>> getFarmList(@RequestHeader("userId") Long userId) {
+        return ApiResponse.ok(farmService.getFarmList(userId), "농장 목록 조회 성공");
     }
 
     @GetMapping("/members")
