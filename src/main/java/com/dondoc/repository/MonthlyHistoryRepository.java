@@ -37,9 +37,4 @@ public class MonthlyHistoryRepository {
 
         return histories.stream().findFirst();
     }
-
-    public void save(MonthlyHistory monthlyHistory) {
-        String sql = "INSERT INTO monthly_history (user_id, target_month, avg_ratio, house_level) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, monthlyHistory.getUserId(), monthlyHistory.getTargetMonth(), monthlyHistory.getAvgRatio(), monthlyHistory.getHouseLevel());
-    }
 }

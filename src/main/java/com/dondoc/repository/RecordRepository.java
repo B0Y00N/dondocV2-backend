@@ -7,13 +7,11 @@ import com.dondoc.repository.projection.ExpenseCategorySummary;
 import com.dondoc.repository.projection.MonthlyRecordAmountSummary;
 import com.dondoc.repository.projection.CategoryAmountSummary;
 import com.dondoc.repository.projection.MonthlyRecordTotal;
-import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;

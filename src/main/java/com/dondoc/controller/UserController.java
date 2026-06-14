@@ -18,16 +18,6 @@ public class UserController {
         this.userService =userService;
     }
 
-    @GetMapping
-    public List<Users.UserResponse> getUsers(){
-        return userService.getUsers();
-    }
-
-    @PostMapping
-    public void createUser(@RequestBody Users.CreateRequest user){
-        userService.createUser(user);
-    }
-
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<Users.MeResponse>> getUserMe(
             @RequestHeader(value = "userId", required = false) Long userId) {

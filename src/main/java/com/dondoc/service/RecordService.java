@@ -1,14 +1,13 @@
 package com.dondoc.service;
 
 import com.dondoc.dto.Categories;
-import com.dondoc.dto.MonthlyHistories;
+import com.dondoc.dto.Records.MonthlyHistory;
 import com.dondoc.dto.Records;
 import com.dondoc.dto.Records.RecordUpdateRequest;
 import com.dondoc.dto.Records.RecordUpdateResponse;
 import com.dondoc.dto.Records.DailySummaryResponse;
 import com.dondoc.dto.*;
 import com.dondoc.entity.Category;
-import com.dondoc.entity.MonthlyHistory;
 import com.dondoc.entity.Recorde;
 import com.dondoc.exception.ApiException;
 import com.dondoc.repository.CategoryRepository;
@@ -63,31 +62,6 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
-    public List<Records.MonthlyHistory> getMonthlyHistories(){
-        List<MonthlyHistory> entities = monthlyHistoryRepository.findAll();
-        return entities.stream()
-                .map(entity -> new Records.MonthlyHistory(
-                        entity.getId(),
-                        entity.getUserId(),
-                        entity.getTargetMonth(),
-                        entity.getAvgRatio(),
-                        entity.getHouseLevel()
-                ))
-                .collect(Collectors.toList());
-    }
-
-    public List<Categories.Category> getCategories(){
-        List<Category> entities = categoryRepository.findAll();
-        return entities.stream()
-                .map(entity -> new Categories.Category(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getIcon(),
-                        entity.getType()
-                ))
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public Records.RecordSaveResponse createRecord(Long userId, Records.RecordSaveRequest saveRequest) {
         // 정합성 검사
@@ -106,22 +80,6 @@ public class RecordService {
                 recorde.getDescription(),
                 recorde.getMemo()
         );
-    }
-
-    public void createMonthlyHistory(Records.MonthlyHistory dto) {
-        MonthlyHistory monthlyHistory = new MonthlyHistory(
-                null, dto.getUserId(), dto.getTargetMonth(),
-                dto.getAvgRatio(), dto.getHouseLevel()
-        );
-        monthlyHistoryRepository.save(monthlyHistory);
-    }
-
-    public void createCategory(Categories.Category dto){
-        Category category = new Category(
-                null, dto.getName(), dto.getIcon(),
-                dto.getType()
-        );
-        categoryRepository.save(category);
     }
 
     public Records.DeleteResponse deleteRecord(Long userId, Long recordId) {
@@ -156,8 +114,8 @@ public class RecordService {
             existing.getUserId(),
             dto.getCategoryId(),
             dto.getAmount(),
-            dto.getDescription(),
-            dto.getMemo(),
+            existing.getDescription(),
+            existing.getMemo(),
             LocalDate.parse(dto.getDate()),
             existing.getCreatedAt()
         );
@@ -166,7 +124,7 @@ public class RecordService {
 
         Recorde updated = recordRepository.findById(id)
                 .orElseThrow(() -> new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "거래 수정 후 조회에 실패했습니다."));
-        Category category = categoryRepository.findById(updated.getCategoryId());
+        Category category = categoryRepository.findById(updated.getCategoryId()).orElseThrow(() -> new ApiException(HttpStatus.CONFLICT, "카테고리 조회 실패"));
 
         return new RecordUpdateResponse(
             updated.getId(),
@@ -176,9 +134,7 @@ public class RecordService {
                 category.getId(),
                 category.getName()
             ),
-            updated.getAmount(),
-            updated.getDescription(),
-            updated.getMemo()
+            updated.getAmount()
         );
     }
 

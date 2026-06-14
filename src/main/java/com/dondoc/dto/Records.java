@@ -107,6 +107,7 @@ public class Records {
         private final String name;
     }
 
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RecordUpdateRequest {

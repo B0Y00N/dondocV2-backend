@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -24,24 +23,6 @@ public class UserRepository {
 
     public UserRepository(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public List<User> findAll(){
-        String sql = "SELECT * FROM users"; //rs는 DB에서 온 한 행의 데이터 전체를 가지고 있다.
-        return jdbcTemplate.query(sql, (rs,rowNum) -> new User(  // .query 메서드 : 첫 번째 인자-날릴 쿼리문, 두 번째 인자-결과를 어떤 객체로 바꿀지 정의
-                rs.getLong("id"),
-                rs.getString("user_id"),
-                rs.getString("user_password"),
-                rs.getString("name"),
-                rs.getInt("age"),
-                rs.getInt("current_pig_level"),
-                rs.getInt("current_house_level"),
-                rs.getInt("current_character_level"),
-                rs.getLong("monthly_income"),
-                rs.getInt("target_expense_ratio"),
-                rs.getObject("created_at", LocalDateTime.class),
-                rs.getObject("last_login_at", LocalDateTime.class)
-        ));
     }
 
     // 1인 유저 한 명만 조회
@@ -111,7 +92,6 @@ public class UserRepository {
                 id
         );
     }
-
 
     public void updateLastLoginAt(Long id) {
         String sql = "UPDATE users SET last_login_at = NOW() WHERE id = ?";

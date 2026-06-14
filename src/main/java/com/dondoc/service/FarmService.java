@@ -1,6 +1,5 @@
 package com.dondoc.service;
 
-import com.dondoc.dto.FarmMembers;
 import com.dondoc.dto.FarmMembers.FarmJoinResponse;
 import com.dondoc.dto.ApiResponse;
 import com.dondoc.dto.Farms;

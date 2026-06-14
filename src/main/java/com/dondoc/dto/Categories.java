@@ -18,16 +18,6 @@ public class Categories {
         private String name;
     }
 
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Category {
-        private Long id;
-        private String name;
-        private String icon;
-        private String type;
-    }
-
     @Getter
     @AllArgsConstructor
     public static class Response {
