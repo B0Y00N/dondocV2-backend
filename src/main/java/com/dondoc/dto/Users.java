@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-public class UserDto {
+public class Users {
 
     @Getter
     @Setter

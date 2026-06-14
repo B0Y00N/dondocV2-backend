@@ -1,6 +1,6 @@
 package com.dondoc.controller;
 
-import com.dondoc.dto.FarmDto;
+import com.dondoc.dto.Farms;
 import com.dondoc.service.FarmService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +18,22 @@ public class FarmController {
     }
 
     @GetMapping
-    public List<FarmDto.Farm> getFarms() {
+    public List<Farms.Farm> getFarms() {
         return farmService.getFarms();
     }
 
     @GetMapping("/members")
-    public List<FarmDto.Member> getFarmMembers() {
+    public List<Farms.Member> getFarmMembers() {
         return farmService.getFarmMembers();
     }
 
     @PostMapping
-    public void createFarm(@RequestBody FarmDto.Farm farm){
+    public void createFarm(@RequestBody Farms.Farm farm){
         farmService.createFarm(farm);
     }
 
     @PostMapping("/members")
-    public void createFarmMember(@RequestBody FarmDto.Member farmMember){
+    public void createFarmMember(@RequestBody Farms.Member farmMember){
         farmService.createFarmMember(farmMember);
     }
 

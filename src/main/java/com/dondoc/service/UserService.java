@@ -19,10 +19,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserDto.UserResponse> getUsers(){
+    public List<Users.UserResponse> getUsers(){
         List<User> entities = userRepository.findAll();
         return entities.stream()
-                .map(entity -> new UserDto.UserResponse(
+                .map(entity -> new Users.UserResponse(
                         entity.getId(),
                         entity.getUserId(),
                         entity.getName(),
@@ -36,7 +36,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void createUser(UserDto.CreateRequest dto){
+    public void createUser(Users.CreateRequest dto){
         User user = new User(
                 null,
                 dto.getUserId(),
@@ -58,7 +58,7 @@ public class UserService {
 
     // dailyBudget = 월예산 / 이번달 일수  -> 하루에 쓸 수 있는 예산
     // LocalDate.now().lengthOfMonth() → 이번달이 며칠인지 자동으로 계산해줌
-    public UserDto.MeResponse getUserMe(Long userId){
+    public Users.MeResponse getUserMe(Long userId){
         if (userId == null) {
             throw new ApiException(
                     HttpStatus.UNAUTHORIZED,
@@ -71,7 +71,7 @@ public class UserService {
         long monthlyBudget = user.getMonthlyIncome() * user.getTargetExpenseRatio() / 100;
         long dailyBudget = monthlyBudget / LocalDate.now().lengthOfMonth();
 
-        return new UserDto.MeResponse(
+        return new Users.MeResponse(
                 user.getName(),
                 user.getAge(),
                 user.getCurrentPigLevel(),
@@ -86,7 +86,7 @@ public class UserService {
 
     }
 
-    public ApiResponse<UserDto.PatchResponse> updateUserMe(Long userId, UserDto.PatchRequest request){
+    public ApiResponse<Users.PatchResponse> updateUserMe(Long userId, Users.PatchRequest request){
         if (userId == null) {
             throw new ApiException(
                     HttpStatus.UNAUTHORIZED,
@@ -111,7 +111,7 @@ public class UserService {
         long monthlyBudget = updatedMonthlyIncome * updatedTargetExpenseRatio / 100;
         long dailyBudget = monthlyBudget / LocalDate.now().lengthOfMonth();
 
-        UserDto.PatchResponse data = new UserDto.PatchResponse(
+        Users.PatchResponse data = new Users.PatchResponse(
                 user.getId(),
                 updatedName,
                 updatedAge,

@@ -1,7 +1,7 @@
 package com.dondoc.repository;
 
 
-import com.dondoc.dto.UserDto;
+import com.dondoc.dto.Users;
 import com.dondoc.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -58,7 +58,7 @@ public class UserRepository {
     }
 
     // 사용자 기본 설정
-    public void update(Long id, UserDto.PatchRequest request, User user) {
+    public void update(Long id, Users.PatchRequest request, User user) {
         String sql = "UPDATE users SET name = ?, age = ?, monthly_income = ?, target_expense_ratio = ? WHERE id = ?";
         jdbcTemplate.update(sql,
                 request.getName() != null ? request.getName() : user.getName(),

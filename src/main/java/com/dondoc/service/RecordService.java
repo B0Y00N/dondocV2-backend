@@ -35,10 +35,10 @@ public class RecordService {
         this.userRepository = userRepository;
     }
 
-    public List<RecordDto.Record> getRecords(){
+    public List<Records.Record> getRecords(){
         List<Recorde> entities = recordRepository.findAll();
         return entities.stream()
-                .map(entity -> new RecordDto.Record(
+                .map(entity -> new Records.Record(
                         entity.getId(),
                         entity.getUserId(),
                         entity.getCategoryId(),
@@ -51,10 +51,10 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
-    public List<RecordDto.MonthlyHistory> getMonthlyHistories(){
+    public List<Records.MonthlyHistory> getMonthlyHistories(){
         List<MonthlyHistory> entities = monthlyHistoryRepository.findAll();
         return entities.stream()
-                .map(entity -> new RecordDto.MonthlyHistory(
+                .map(entity -> new Records.MonthlyHistory(
                         entity.getId(),
                         entity.getUserId(),
                         entity.getTargetMonth(),
@@ -64,10 +64,10 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
-    public List<CategoryDto.Category> getCategories(){
+    public List<Categories.Category> getCategories(){
         List<Category> entities = categoryRepository.findAll();
         return entities.stream()
-                .map(entity -> new CategoryDto.Category(
+                .map(entity -> new Categories.Category(
                         entity.getId(),
                         entity.getName(),
                         entity.getIcon(),
@@ -76,7 +76,7 @@ public class RecordService {
                 .collect(Collectors.toList());
     }
 
-    public void createRecord(RecordDto.Record dto){
+    public void createRecord(Records.Record dto){
         Recorde recorde = new Recorde(
                 null, dto.getUserId(), dto.getCategoryId(),
                 dto.getAmount(), dto.getDescription(), dto.getMemo(), dto.getRecordDate(),
@@ -85,7 +85,7 @@ public class RecordService {
         recordRepository.save(recorde);
     }
 
-    public void createMonthlyHistory(RecordDto.MonthlyHistory dto){
+    public void createMonthlyHistory(Records.MonthlyHistory dto){
         MonthlyHistory monthlyHistory = new MonthlyHistory(
                 null, dto.getUserId(), dto.getTargetMonth(),
                 dto.getAvgRatio(), dto.getHouseLevel()
@@ -93,7 +93,7 @@ public class RecordService {
         monthlyHistoryRepository.save(monthlyHistory);
     }
 
-    public void createCategory(CategoryDto.Category dto){
+    public void createCategory(Categories.Category dto){
         Category category = new Category(
                 null, dto.getName(), dto.getIcon(),
                 dto.getType()
@@ -104,7 +104,7 @@ public class RecordService {
     //  1. repository에서 records와 summary 가져오기
     //  2. summary + records 합쳐서 응답 반환
     @Transactional(readOnly = true)
-    public ApiResponse<RecordDto.MonthlyResponse> getMonthlyRecords(Long userId, String yearMonth, String type) {
+    public ApiResponse<Records.MonthlyResponse> getMonthlyRecords(Long userId, String yearMonth, String type) {
         if (userId == null) {
             throw new ApiException(
                     HttpStatus.UNAUTHORIZED,
@@ -115,9 +115,9 @@ public class RecordService {
             throw new ApiException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.");
         }
 
-        List<RecordDto.ItemResponse> records = recordRepository.findByUserMonth(userId, yearMonth, type);
-        RecordDto.Summary summary = recordRepository.findSummaryByUserMonth(userId, yearMonth, type);
-        RecordDto.MonthlyResponse data = new RecordDto.MonthlyResponse(summary, records);
+        List<Records.ItemResponse> records = recordRepository.findByUserMonth(userId, yearMonth, type);
+        Records.Summary summary = recordRepository.findSummaryByUserMonth(userId, yearMonth, type);
+        Records.MonthlyResponse data = new Records.MonthlyResponse(summary, records);
 
         return new ApiResponse<>(true, data, "거래 내역 조회 성공");
 

@@ -1,7 +1,7 @@
 package com.dondoc.service;
 
 import com.dondoc.dto.ApiResponse;
-import com.dondoc.dto.FarmDto;
+import com.dondoc.dto.Farms;
 import com.dondoc.entity.Farm;
 import com.dondoc.entity.FarmMember;
 import com.dondoc.exception.ApiException;
@@ -24,10 +24,10 @@ public class FarmService {
         this.farmMemberRepository = farmMemberRepository;
     }
 
-    public List<FarmDto.Farm> getFarms(){
+    public List<Farms.Farm> getFarms(){
         List<Farm> entities = farmRepository.findAll();
         return entities.stream()
-                .map(entity -> new FarmDto.Farm(
+                .map(entity -> new Farms.Farm(
                         entity.getId(),
                         entity.getName(),
                         entity.getCreatedAt()
@@ -35,10 +35,10 @@ public class FarmService {
                 .collect(Collectors.toList());
     }
 
-    public List<FarmDto.Member> getFarmMembers(){
+    public List<Farms.Member> getFarmMembers(){
         List<FarmMember> entities = farmMemberRepository.findAll();
         return entities.stream()
-                .map(entity -> new FarmDto.Member(
+                .map(entity -> new Farms.Member(
                         entity.getId(),
                         entity.getUserId(),
                         entity.getFarmId(),
@@ -46,14 +46,14 @@ public class FarmService {
                 )).collect(Collectors.toList());
     }
 
-    public void createFarm(FarmDto.Farm dto){
+    public void createFarm(Farms.Farm dto){
         Farm farm = new Farm(
                 null, dto.getName(), dto.getCreatedAt()
         );
         farmRepository.save(farm);
     }
 
-    public void createFarmMember(FarmDto.Member dto){
+    public void createFarmMember(Farms.Member dto){
         FarmMember farmMember = new FarmMember(
                 null, dto.getUserId(), dto.getFarmId(), dto.getJoinedAt()
         );
@@ -66,7 +66,7 @@ public class FarmService {
     //  3. 0명이면 농장도 삭제
     //  4. 응답 반환 (명세서에 message 없어서 null)
     @Transactional
-    public ApiResponse<FarmDto.LeaveResponse> leaveFarm(Long farmId, Long userId) {
+    public ApiResponse<Farms.LeaveResponse> leaveFarm(Long farmId, Long userId) {
         if (userId == null) {
             throw new ApiException(
                     HttpStatus.UNAUTHORIZED,
@@ -84,7 +84,7 @@ public class FarmService {
             farmRepository.deleteById(farmId);
         }
 
-        FarmDto.LeaveResponse data = new FarmDto.LeaveResponse(farmId, userId);
+        Farms.LeaveResponse data = new Farms.LeaveResponse(farmId, userId);
         return new ApiResponse<>(true, data, null);
     }
 

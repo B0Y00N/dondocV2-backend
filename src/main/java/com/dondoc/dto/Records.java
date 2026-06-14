@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class RecordDto {
+public class Records {
 
     @Getter
     @Setter
@@ -44,7 +44,7 @@ public class RecordDto {
         private Long id;
         private String type;
         private String date;
-        private CategoryDto.Info category;
+        private Categories.Info category;
         private Long amount;
         private String description;
         private String memo;

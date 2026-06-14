@@ -1,7 +1,7 @@
 package com.dondoc.controller;
 
 import com.dondoc.dto.ApiResponse;
-import com.dondoc.dto.UserDto;
+import com.dondoc.dto.Users;
 import com.dondoc.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +19,28 @@ public class    UserController {
     }
 
     @GetMapping
-    public List<UserDto.UserResponse> getUsers(){
+    public List<Users.UserResponse> getUsers(){
         return userService.getUsers();
     }
 
     // PostMapping - POST 요청을 받는 엔드포인트
-    // @RequestBody - 요청 body의 JSON을 UserDto.CreateRequest 객체로 변환
+    // @RequestBody - 요청 body의 JSON을 Users.CreateRequest 객체로 변환
     @PostMapping
-    public void createUser(@RequestBody UserDto.CreateRequest user){
+    public void createUser(@RequestBody Users.CreateRequest user){
         userService.createUser(user);
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> getUserMe(
             @RequestHeader(value = "userId", required = false) Long userId) {
-        UserDto.MeResponse response = userService.getUserMe(userId);
+        Users.MeResponse response = userService.getUserMe(userId);
         return ResponseEntity.ok(ApiResponse.ok(response, "월별 요약 통계 조회 성공"));
     }
 
     @PatchMapping("/me")
     public ResponseEntity<?> updateUserMe(
             @RequestHeader(value = "userId", required = false) Long userId,
-            @RequestBody UserDto.PatchRequest request){
+            @RequestBody Users.PatchRequest request){
         return ResponseEntity.ok(userService.updateUserMe(userId, request));
     }
 }
