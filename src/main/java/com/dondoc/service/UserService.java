@@ -75,16 +75,16 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        if(!request.getName().isEmpty()) {
+        if (request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName());
         }
-        if(request.getAge() != 0) {
+        if (request.getAge() != null) {
             user.setAge(request.getAge());
         }
-        if(request.getMonthlyIncome() != 0) {
+        if (request.getMonthlyIncome() != null) {
             user.setMonthlyIncome(request.getMonthlyIncome());
         }
-        if(request.getTargetExpenseRatio() != 0) {
+        if (request.getTargetExpenseRatio() != null) {
             user.setTargetExpenseRatio(request.getTargetExpenseRatio());
         }
 
